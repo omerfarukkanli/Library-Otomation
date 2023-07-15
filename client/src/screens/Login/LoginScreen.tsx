@@ -5,16 +5,19 @@ import AuthButton from "../../components/register/AuthButton"
 import { StackNavigationProp } from '@react-navigation/stack';
 import { useNavigation } from '@react-navigation/core';
 import { RootStackParamList } from '../../types'
-
+import { useState } from "react";
 
 
 const LoginScreen = () => {
+
+    const [email, setEmail] = useState("")
+    const [password,setPassword] = useState("")
     const navigation = useNavigation<StackNavigationProp<RootStackParamList>>();
     return (
         <View style={styles.container}>
             <Text style={styles.text}> LİBRARY</Text>
-            <InputText placeholder="Kullanıcı Adı" />
-            <InputText placeholder="şifre" secureText={true} />
+            <InputText value={email} placeholder="E-mail" />
+            <InputText value={password} placeholder="şifre" secureText={true} />
             <AuthButton title="Gİriş Yap" handlePressButton={() => navigation.navigate("Home")} />
             <View style={styles.textController}>
                 <Text>Kayıt olmak için </Text>
