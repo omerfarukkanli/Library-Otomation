@@ -1,34 +1,36 @@
 import Book, { IBook } from "../models/book.model";
-import multer from "multer";
 import { Request, Response } from "express";
 import mongoose from "mongoose";
+import multer from "multer";
+const storage = multer.diskStorage({
+    destination: "uploads/",
 
-const upload = multer({ dest: 'uploads/' });
+})
+const upload = multer({ storage: storage })
 
-
-export const createBook = (upload.single('coverImage'), async (req: Request, res: Response) => {
-
-    const { title, isbn, authors, genre } = req.body;
-    const coverImage = req.path
-
-    const book: IBook = new Book({
-        title,
-        isbn,
-        authors,
-        genre,
-        coverImage,
-    });
-
+export const createBook = async (req: Request, res: Response) => {
     try {
+        const { title, isbn, authors, genre }: { title: string, isbn: string, authors: string[], genre: string } = req.body;
+        const coverImage: string = req.file.filename
+        const book: IBook = new Book({
+            title,
+            isbn,
+            authors,
+            genre,
+            coverImage
+        });
+
         const newBook = await book.save();
         res.status(201).json(newBook);
     } catch (err) {
+        console.log(err);
         res.status(400).json({ message: err.message });
     }
-});
+};
 
 export const getAllBooks = async (res: Response) => {
     try {
+        
         const books = await Book.find();
         res.json(books);
     } catch (error) {
@@ -46,20 +48,6 @@ export const getBookById = async (req: Request, res: Response) => {
         res.status(404).json({ message: error.message })
     }
 }
-
-export const getBookNameOrAuthor = async (req: Request, res: Response) => {
-    try {
-        const { title, author, isbn } = req.query;
-        let query: any = {};
-        if (title) query.title = { $regex: title.toString(), $options: 'i' };
-        if (author) query.authors = { $regex: author.toString(), $options: 'i' };
-        if (isbn) query.authors = { $regex: isbn.toString(), $options: 'i' };
-        const books = await Book.find(query);
-        res.json(books);
-    } catch (err) {
-        res.status(500).json({ message: err.message });
-    }
-};
 
 export const upgradeBook = async (req: Request, res: Response) => {
     const id = req.params.id;

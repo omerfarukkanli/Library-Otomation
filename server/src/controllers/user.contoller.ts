@@ -2,8 +2,8 @@ import User, { IUser } from "../models/user.model"
 import { Request, Response } from "express"
 
 export const registerUser = async (req: Request, res: Response) => {
-    const { name, lastname, password, email }: { name: string, lastname: string, password: string, email: string } = req.body;
     try {
+        const { name, lastname, password, email }: { name: string, lastname: string, password: string, email: string } = req.body;
         const userClone: IUser = await User.findOne({ email })
         if (userClone) res.status(400).json({ message: "User already exists" })
 
@@ -18,8 +18,8 @@ export const registerUser = async (req: Request, res: Response) => {
             password,
             email,
         });
-        const newUser = await user.save();
-        res.status(201).json(newUser);
+        await user.save();
+        res.status(201).json(user);
     } catch (error) {
         res.status(400).json({ message: error.message });
     }

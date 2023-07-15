@@ -1,16 +1,15 @@
 import express from "express";
-import bodyParser from 'body-parser';
 import cors from "cors";
 import route from "./routes"
 import { connectToDB } from "./config/database"
-
+import bodyParser from "body-parser";
 const App = express()
-
 App.use(cors());
 App.use(bodyParser.json());
-App.use(bodyParser.urlencoded({ extended: true }));
-
-connectToDB()
+await connectToDB()
 App.use(route);
 
 
+App.listen(3000, () => {
+    console.log('listening');
+})

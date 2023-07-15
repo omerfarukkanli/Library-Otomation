@@ -1,4 +1,4 @@
-import mongoose, { Schema, Document } from "mongoose";
+import mongoose, { Document, Schema } from 'mongoose';
 
 export interface IBook extends Document {
     title: string;
@@ -8,12 +8,12 @@ export interface IBook extends Document {
     coverImage: string;
 }
 
-const BookSchema: Schema = new Schema({
+const bookSchema: Schema<IBook> = new Schema({
     title: { type: String, required: true },
-    isbn: { type: String, required: true, unique: true },
+    isbn: { type: String, required: true },
     authors: { type: [String], required: true },
     genre: { type: String, required: true },
     coverImage: { type: String, required: true },
-})
+});
 
-export default mongoose.model<IBook>("Book", BookSchema);
+export default mongoose.model<IBook>('Book', bookSchema);

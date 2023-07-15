@@ -7,8 +7,8 @@ export interface IUser extends Document {
     authority: boolean;
 }
 
-const UserSchema: Schema = new Schema({
-    usename: { type: String, required: true },
+const UserSchema: Schema<IUser> = new Schema({
+    username: { type: String, required: true },
     password: { type: String, required: true, minlength: 8 },
     email: { type: String, required: true, match: /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/, unique: true },
     authority: { type: Boolean, default: false },
