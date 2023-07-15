@@ -1,3 +1,5 @@
+import { IUser } from "../api/user.api";
+
 export type RootStackParamList = {
     Home: { id: number } | undefined;
     Login: { id: number } | undefined;

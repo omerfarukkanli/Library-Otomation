@@ -1,11 +1,11 @@
-import { createAsyncThunk, createSlice } from "@reduxjs/toolkit"
+import { PayloadAction, createAsyncThunk, createSlice ,Draft} from "@reduxjs/toolkit"
 import { IUser, addUserFromDb } from "../api/user.api"
 
 interface UserState {
-    user: IUser | null,
+    userState: IUser | null,
 }
 const initialState: UserState = {
-    user: null,
+    userState: null,
 }
 export const addUser = createAsyncThunk("User/addUser", async (user: IUser) => {
     console.log(user)
@@ -17,12 +17,19 @@ export const addUser = createAsyncThunk("User/addUser", async (user: IUser) => {
 export const UserSlice = createSlice({
     name: "User",
     initialState: initialState,
-    reducers: {},
+    reducers: {
+        setUser: (state, action: PayloadAction<UserState>) => {
+            return action.payload;
+        },
+        clearUser: () => {
+            return initialState;
+        },
+    },
     extraReducers: (builder) => {
         builder.addCase(addUser.fulfilled, (state, action) => {
-            state.user = action.payload;
+            state.userState = action.payload;
         })
     }
 })
 
-
+export const { setUser, clearUser } = UserSlice.actions;

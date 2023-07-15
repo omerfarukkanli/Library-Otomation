@@ -10,8 +10,7 @@ export interface IUser {
 export const addUserFromDb = async (user: IUser): Promise<IUser> => {
     console.log(user)
     try {
-        const response = await axios.post("http://localhost:3000/register", user);
-        console.log(response.data);
+        const response = await axios.post("http://10.0.2.2:3000/register", user);
         return response.data;
     } catch (error) {
         console.log(error);

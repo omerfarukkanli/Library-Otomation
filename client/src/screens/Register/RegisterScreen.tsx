@@ -29,9 +29,9 @@ const RegisterScreen = () => {
                 password: password
             }
             console.log(userData)
-            dispatch(addUser(userData))
-            
-            if (userData != null) navigation.navigate("Home")
+            const user: IUser = await dispatch(addUser(userData))
+
+            if (user != null) navigation.navigate("Home")
 
         } catch (error) {
             console.log(error)
@@ -42,12 +42,12 @@ const RegisterScreen = () => {
             <Text style={styles.text}> LİBRARY</Text>
             <InputText placeholder="Ad" value={name} onChangeText={setName} />
             <InputText placeholder="Soyad" value={lastname} onChangeText={setLastName} />
-            <InputText placeholder="E-mail" keyboardType='email-address' value={email} onChangeText={setEmail}/>
-            <InputText placeholder="şifre" secureText={true} value={password}onChangeText={setPassword} />
+            <InputText placeholder="E-mail" keyboardType='email-address' value={email} onChangeText={setEmail} />
+            <InputText placeholder="şifre" secureText={true} value={password} onChangeText={setPassword} />
             <AuthButton title="Kayıt Ol" handlePressButton={handlePressButton} />
             <View style={styles.textController}>
                 <Text>Giriş yapmak için </Text>
-                <Text style={{ color: "tomato" }} onPress={handlePressButton}>Tıklayınız</Text>
+                <Text style={{ color: "tomato" }} onPress={() => navigation.navigate("Login")}>Tıklayınız</Text>
             </View>
         </View>
     )
