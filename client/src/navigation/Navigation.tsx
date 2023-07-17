@@ -1,19 +1,16 @@
-import { useNavigation } from "@react-navigation/native"
-import { StackNavigationProp, createStackNavigator } from "@react-navigation/stack"
+import { createStackNavigator } from "@react-navigation/stack"
 import LoginScreen from "../screens/Login/LoginScreen"
 import RegisterScreen from "../screens/Register/RegisterScreen"
 import HomeScreen from "../screens/Home/HomeScreen"
 import BookDetailScreen from "../screens/BookDetail/BookDetailScreen"
-import { RootStackParamList } from "../types"
 import ProfileScreen from "../screens/Profile/ProfileScreen"
 import HeaderButton from "../components/HeaderButton/HeaderButton"
 
-
 const Stack = createStackNavigator()
+
 const Navigation = () => {
-    const navigation = useNavigation<StackNavigationProp<RootStackParamList>>();
     return (
-        <Stack.Navigator initialRouteName='Register' screenOptions={{
+        <Stack.Navigator initialRouteName='Home' screenOptions={{
             headerRight: () => (
                 <HeaderButton />
             ),

@@ -6,19 +6,48 @@ import { StackNavigationProp } from '@react-navigation/stack';
 import { useNavigation } from '@react-navigation/core';
 import { RootStackParamList } from '../../types'
 import { useState } from "react";
-
-
+import { clearUser, loginUser } from "../../features/userSlice";
+import { IUserRes } from "../../api/user.api";
+import { AppDispatch, RootState } from "../../store";
+import { AnyAction, ThunkDispatch } from "@reduxjs/toolkit";
+import { useDispatch, useSelector } from "react-redux";
+import ErrorText from "../../components/ErrorText/ErrorText";
 
 const LoginScreen = () => {
     const navigation = useNavigation<StackNavigationProp<RootStackParamList>>();
+    const dispatch: ThunkDispatch<RootState, undefined, AnyAction> = useDispatch<AppDispatch>()
+    const selectError = useSelector((state: RootState) => state.userReducer.error);
+
     const [email, setEmail] = useState("")
     const [password, setPassword] = useState("")
+
+    email.trim()
+    password.trim()
+
+    const handlePressButton = async () => {
+        email.trim();
+        password.trim();
+        const userData: IUserRes = {
+            email: email,
+            password: password
+        }
+        const user = await dispatch(loginUser(userData));
+        if (user.meta.requestStatus === "fulfilled") {
+            navigation.navigate('Home');
+            setEmail('');
+            setPassword('')
+        }
+        else dispatch(clearUser())
+    }
     return (
         <View style={styles.container}>
-            <Text style={styles.text}> LİBRARY</Text>
+            <View style={{ position: "relative" }}>
+                <Text style={styles.text}> LİBRARY</Text>
+                <ErrorText text={selectError} />
+            </View>
             <InputText value={email} placeholder="E-mail" onChangeText={setEmail} />
             <InputText value={password} placeholder="şifre" secureText={true} onChangeText={setPassword} />
-            <AuthButton title="Gİriş Yap" handlePressButton={() => navigation.navigate("Home")} />
+            <AuthButton title="Gİriş Yap" handlePressButton={handlePressButton} />
             <View style={styles.textController}>
                 <Text>Kayıt olmak için </Text>
                 <Text style={{ color: "tomato" }} onPress={() => navigation.navigate("Register")}>Tıklayınız</Text>

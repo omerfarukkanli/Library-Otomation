@@ -5,41 +5,52 @@ import { StackNavigationProp } from '@react-navigation/stack';
 import { useNavigation } from '@react-navigation/core';
 import { RootStackParamList } from '../../types'
 import styles from "./RegisterScreen.style"
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { IUser } from "../../api/user.api";
-import { useDispatch } from "react-redux";
-import { addUser } from "../../features/userSlice";
-
-
+import { useDispatch, useSelector } from "react-redux";
+import { addUser, clearError, clearUser } from "../../features/userSlice";
+import { AppDispatch, RootState } from "../../store";
+import { AnyAction, ThunkDispatch } from "@reduxjs/toolkit";
+import ErrorText from "../../components/ErrorText/ErrorText";
 
 const RegisterScreen = () => {
     const navigation = useNavigation<StackNavigationProp<RootStackParamList>>();
-    const dispatch = useDispatch<any>()
+    const dispatch: ThunkDispatch<RootState, undefined, AnyAction> = useDispatch<AppDispatch>()
+    const selectError = useSelector((state: RootState) => state.userReducer.error);
+
     const [name, setName] = useState('')
     const [lastname, setLastName] = useState('')
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
 
+    name.trim()
+    lastname.trim()
+    email.trim()
+    password.trim()
+
     const handlePressButton = async () => {
-        try {
-            const userData: IUser = {
-                name: name,
-                lastname: lastname,
-                email: email,
-                password: password
-            }
-            console.log(userData)
-            const user: IUser = await dispatch(addUser(userData))
-
-            if (user != null) navigation.navigate("Home")
-
-        } catch (error) {
-            console.log(error)
+        const userData: IUser = {
+            name: name,
+            lastname: lastname,
+            email: email,
+            password: password
         }
+        const user = await dispatch(addUser(userData));
+        if (user.meta.requestStatus === "fulfilled") {
+            navigation.navigate('Home');
+            setName('');
+            setLastName('');
+            setEmail('');
+            setPassword('')
+        }
+        else dispatch(clearUser())
     }
     return (
         <View style={styles.container}>
-            <Text style={styles.text}> LİBRARY</Text>
+            <View style={{ position: "relative" }}>
+                <Text style={styles.text}> LİBRARY</Text>
+                <ErrorText text={selectError} />
+            </View>
             <InputText placeholder="Ad" value={name} onChangeText={setName} />
             <InputText placeholder="Soyad" value={lastname} onChangeText={setLastName} />
             <InputText placeholder="E-mail" keyboardType='email-address' value={email} onChangeText={setEmail} />

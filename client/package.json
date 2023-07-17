@@ -19,7 +19,8 @@
     "react-native": "0.71.8",
     "react-navigation": "^4.4.4",
     "react-redux": "^8.1.1",
-    "react-timer-mixin": "^0.13.4"
+    "react-timer-mixin": "^0.13.4",
+    "redux-persist": "^6.0.0"
   },
   "devDependencies": {
     "@babel/core": "^7.20.0",
