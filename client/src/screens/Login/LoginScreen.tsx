@@ -45,7 +45,7 @@ const LoginScreen = () => {
                 <Text style={styles.text}> LİBRARY</Text>
                 <ErrorText text={selectError} />
             </View>
-            <InputText value={email} placeholder="E-mail" onChangeText={setEmail} />
+            <InputText value={email} placeholder="E-mail" onChangeText={setEmail} keyboardType="email-address" />
             <InputText value={password} placeholder="şifre" secureText={true} onChangeText={setPassword} />
             <AuthButton title="Gİriş Yap" handlePressButton={handlePressButton} />
             <View style={styles.textController}>

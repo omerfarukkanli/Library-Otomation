@@ -1,9 +1,17 @@
-import { Text, View } from "react-native"
-
+import { View } from "react-native"
+import React, { useState } from "react"
+import AddBookModal from "../../components/AddBookModal/AddBookModal"
+import AddBookButton from "../../components/AddBookModal/AddBookButton"
 const HomeScreen = () => {
+    const [isVisible, setİsVisiable] = useState<boolean>(true)
+
+    const handlePress = () => {
+        setİsVisiable(!isVisible)
+    }
     return (
         <View>
-            <Text>Home</Text>
+            <AddBookModal isVisible={isVisible} onClose={handlePress} />
+            <AddBookButton onPress={handlePress} />
         </View>
     )
 }
