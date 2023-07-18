@@ -1,23 +1,18 @@
 import Book, { IBook } from "../models/book.model";
 import { Request, Response } from "express";
 import mongoose from "mongoose";
-import multer from "multer";
-const storage = multer.diskStorage({
-    destination: "uploads/",
-
-})
-const upload = multer({ storage: storage })
-
+import fs from "fs"
+import uploadImage from "../utils/cloudinary";
 export const createBook = async (req: Request, res: Response) => {
     try {
-        const { title, isbn, authors, genre }: { title: string, isbn: string, authors: string[], genre: string } = req.body;
-        const coverImage: string = req.file.filename
+        const { title, isbn, authors, genre, image } = req.body;
+        const uplodImage = await uploadImage(image)
         const book: IBook = new Book({
             title,
             isbn,
             authors,
             genre,
-            coverImage
+            coverImage: uplodImage.secure_url
         });
 
         const newBook = await book.save();
@@ -28,13 +23,20 @@ export const createBook = async (req: Request, res: Response) => {
     }
 };
 
-export const getAllBooks = async (res: Response) => {
+export const getAllBooks = async (req: Request, res: Response) => {
     try {
-        
         const books = await Book.find();
-        res.json(books);
+        books.map(async (book) => {
+            const coverImage = `../uploads/${book.coverImage}`;
+            const coverImageBuffer = fs.readFileSync(coverImage);
+            const coverImageBase64 = coverImageBuffer.toString('base64');
+
+            res.status(201).json({ coverImageBase64 });
+        });
+
+
     } catch (error) {
-        res.json({ message: error.message })
+        res.status(400).json({ message: error.message })
     }
 }
 

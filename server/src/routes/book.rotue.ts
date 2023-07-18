@@ -1,6 +1,5 @@
 import express from "express";
 import { getAllBooks, getBookById, deleteBook, upgradeBook, createBook } from '../controllers/book.contoller'
-
 const router = express.Router();
 
 router.post("/books/create", createBook)

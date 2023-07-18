@@ -1,7 +1,7 @@
 import express from "express";
 import cors from "cors";
 import route from "./routes"
-import { connectToDB } from "./config/database"
+import { connectToDB } from "./utils/database"
 import bodyParser from "body-parser";
 const App = express()
 App.use(cors());
