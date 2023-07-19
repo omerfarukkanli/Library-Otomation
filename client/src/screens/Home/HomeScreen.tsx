@@ -3,7 +3,7 @@ import React, { useState } from "react"
 import AddBookModal from "../../components/AddBookModal/AddBookModal"
 import AddBookButton from "../../components/AddBookModal/AddBookButton"
 const HomeScreen = () => {
-    const [isVisible, setİsVisiable] = useState<boolean>(true)
+    const [isVisible, setİsVisiable] = useState<boolean>(false)
 
     const handlePress = () => {
         setİsVisiable(!isVisible)

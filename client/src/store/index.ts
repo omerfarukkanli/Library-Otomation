@@ -1,10 +1,12 @@
-import { AnyAction, ThunkDispatch, configureStore } from "@reduxjs/toolkit";
+import { configureStore } from "@reduxjs/toolkit";
 import { UserSlice } from "../features/userSlice";
-import { useDispatch } from "react-redux";
+
+import { BookSlice } from "../features/bookSlice";
 
 export const store = configureStore({
     reducer: {
-        userReducer: UserSlice.reducer
+        userReducer: UserSlice.reducer,
+        bookReducer: BookSlice.reducer
     }
 })
 

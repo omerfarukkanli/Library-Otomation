@@ -1,6 +1,6 @@
 import { Text, TouchableOpacity, View } from 'react-native'
 import React from 'react'
-import styles from "./Button.style"
+import styles from "./styles/Button.style"
 
 interface IProps {
     onPress: () => void

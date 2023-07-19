@@ -1,4 +1,4 @@
-import { PayloadAction, createAsyncThunk, createSlice } from "@reduxjs/toolkit"
+import { createAsyncThunk, createSlice } from "@reduxjs/toolkit"
 import { IUser, IUserRes, addUserFromDb, loginFromDb } from "../api/user.api"
 
 interface UserState {
