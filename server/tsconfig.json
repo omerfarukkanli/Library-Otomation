@@ -3,7 +3,7 @@
         "module": "ESNext",
         "esModuleInterop": true,
         "resolveJsonModule": true,
-        "target":"ESNext",
+        "target": "ESNext",
         "moduleResolution": "Node",
         "outDir": "dist",
         "baseUrl": "src"
@@ -17,5 +17,5 @@
     "ts-node": {
         "esm": true,
         "experimentalSpecifierResolution": "node",
-      }
+    }
 }

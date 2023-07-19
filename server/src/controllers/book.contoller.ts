@@ -2,21 +2,21 @@ import Book, { IBook } from "../models/book.model";
 import { Request, Response } from "express";
 import mongoose from "mongoose";
 import fs from "fs"
-import uploadImage from "../utils/cloudinary";
-export const createBook = async (req: Request, res: Response) => {
-    try {
-        const { title, isbn, authors, genre, image } = req.body;
-        const uplodImage = await uploadImage(image)
-        const book: IBook = new Book({
-            title,
-            isbn,
-            authors,
-            genre,
-            coverImage: uplodImage.secure_url
-        });
+import { uploadImage } from "../utils/cloudinary";
 
-        const newBook = await book.save();
-        res.status(201).json(newBook);
+export const createBook = async (req: Request, res: Response) => {
+    const { title, isbn, authors, genre, image } = req.body;
+    try {
+        const imageUpload = await uploadImage(image)
+        console.log(imageUpload)
+        const book: IBook = await Book.create({
+            title: title,
+            isbn: isbn,
+            authors: authors,
+            genre: genre,
+            coverImage: imageUpload.secure_url
+        })
+        res.status(201).json({ book });
     } catch (err) {
         console.log(err);
         res.status(400).json({ message: err.message });
@@ -26,15 +26,7 @@ export const createBook = async (req: Request, res: Response) => {
 export const getAllBooks = async (req: Request, res: Response) => {
     try {
         const books = await Book.find();
-        books.map(async (book) => {
-            const coverImage = `../uploads/${book.coverImage}`;
-            const coverImageBuffer = fs.readFileSync(coverImage);
-            const coverImageBase64 = coverImageBuffer.toString('base64');
-
-            res.status(201).json({ coverImageBase64 });
-        });
-
-
+        res.status(201).json({ books });
     } catch (error) {
         res.status(400).json({ message: error.message })
     }
