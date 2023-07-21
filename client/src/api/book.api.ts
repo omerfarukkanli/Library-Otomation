@@ -15,7 +15,7 @@ export interface IUserRes {
 }
 export const addBookFromDB = async (book: IBook): Promise<IBook | any> => {
     try {
-        const response = await axios.post("http://10.0.2.2:3000/books/create", book)
+        const response = await axios.post("http://10.0.2.2:3000/books", book,)
         return response.data;
     } catch (error: any) {
         if (error.response) {

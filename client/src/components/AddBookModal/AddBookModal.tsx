@@ -3,20 +3,19 @@ import React, { useState } from 'react'
 import Modal from "react-native-modal"
 import styles from "./styles/Modal.style"
 import AddBookInput from './AddBookInput'
-import * as ImagePicker from 'expo-image-picker';
-import { FileSystem } from 'react-native-unimodules';
 import { IBook } from '../../api/book.api'
 import { AnyAction, ThunkDispatch } from '@reduxjs/toolkit'
 import { AppDispatch, RootState } from '../../store'
 import { useDispatch } from 'react-redux'
 import { addBook, clearBook } from '../../features/bookSlice'
-
+import * as ImagePicker from 'expo-image-picker';
+import * as FS from "expo-file-system"
 interface IProps {
     isVisible: boolean;
     onClose: () => void
 }
 
-const AddBookModal: React.FC<IProps> = ({ isVisible, onClose }) => {
+const AddBookModal: React.FC<IProps | any> = ({ isVisible, onClose }) => {
     const dispatch: ThunkDispatch<RootState, undefined, AnyAction> = useDispatch<AppDispatch>()
 
     const [authors, setAuthors] = useState<string[]>([])
@@ -53,26 +52,32 @@ const AddBookModal: React.FC<IProps> = ({ isVisible, onClose }) => {
                 mediaTypes: ImagePicker.MediaTypeOptions.Images,
                 allowsEditing: true,
                 quality: 1,
+                base64: true
             });
 
             if (!result.canceled) {
-                const uri = result.assets[0].uri;
-                const base64 = await convertImageToBase64(uri);
-                setBase64Data(base64);
+                const fileType = await getFileInfo(result.assets[0].uri)
+                const base64 = `data:image/${fileType};base64,${result.assets[0].base64}`
+                setBase64Data(base64)
                 setIsImageLoaded(true);
             }
         } catch (error) {
             console.log('Resim seçme hatası:', error);
         }
     };
-
-    const convertImageToBase64 = async (uri: any) => {
-        const base64 = await FileSystem.readAsStringAsync(uri, {
-            encoding: FileSystem.EncodingType.Base64,
-        });
-        return base64;
-    };
-
+    const getFileInfo = async (fileURI: string) => {
+        try {
+            const fileInfo = await FS.getInfoAsync(fileURI);
+            if (fileInfo.exists) {
+                const extension = fileInfo.uri.split('.').pop();
+                return extension;
+            } else {
+                console.log('Dosya bulunamadı.');
+            }
+        } catch (error) {
+            console.error('Hata:', error);
+        }
+    }
     const handleImageClear = () => {
         setBase64Data('');
         setIsImageLoaded(false);
@@ -138,10 +143,6 @@ const AddBookModal: React.FC<IProps> = ({ isVisible, onClose }) => {
                             </View>
                         </TouchableOpacity>
                     </View>
-                )}
-
-                {isImageLoaded && (
-                    <View style={styles.checkmark} />
                 )}
                 <TouchableOpacity onPress={handlePressButton}>
                     <View>
