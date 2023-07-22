@@ -1,8 +1,8 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import { IBook, addBookFromDB } from "../api/book.api";
+import { IBook, IBookRes, addBookFromDB, getAllBookFromDB } from "../api/book.api";
 
 interface BookState {
-    bookState: IBook | null;
+    bookState: IBook | null | IBookRes | IBookRes[];
     error: string | undefined;
 }
 const initialState: BookState = {
@@ -10,7 +10,7 @@ const initialState: BookState = {
     error: undefined
 }
 
-export const addBook = createAsyncThunk("User/addUser", async (book: IBook) => {
+export const addBook = createAsyncThunk("Book/addBook", async (book: IBook) => {
     try {
         const response = await addBookFromDB(book)
         return response;
@@ -19,6 +19,14 @@ export const addBook = createAsyncThunk("User/addUser", async (book: IBook) => {
     }
 })
 
+export const getAllBooks = createAsyncThunk("Book/getAllBook", async () => {
+    try {
+        const response = await getAllBookFromDB()
+        return response;
+    } catch (error: any) {
+        throw error;
+    }
+})
 
 
 export const BookSlice = createSlice({
@@ -34,6 +42,13 @@ export const BookSlice = createSlice({
             state.bookState = action.payload;
         });
         builder.addCase(addBook.rejected, (state, action) => {
+            state.bookState = null;
+            state.error = action.error.message;
+        });
+        builder.addCase(getAllBooks.fulfilled, (state, action) => {
+            state.bookState = action.payload;
+        });
+        builder.addCase(getAllBooks.rejected, (state, action) => {
             state.bookState = null;
             state.error = action.error.message;
         });
