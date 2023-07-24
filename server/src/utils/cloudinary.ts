@@ -8,5 +8,9 @@ cloudinary.config({
 });
 
 export async function uploadImage(imageString: string) {
-    return cloudinary.uploader.upload(imageString, { folder: "books"});
+    return cloudinary.uploader.upload(imageString, { folder: "books", resource_type: "image" });
+}
+
+export async function deleteImage(publicId) {
+    return cloudinary.uploader.destroy(publicId);
 }
