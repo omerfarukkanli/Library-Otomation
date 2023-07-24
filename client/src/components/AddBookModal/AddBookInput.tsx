@@ -2,7 +2,7 @@ import { View, TextInput } from 'react-native'
 import React, { useState } from 'react'
 import styles from "./styles/Input.style"
 interface IProps {
-    placeholder: string
+    placeholder?: string
     onChangeText: (text: string) => void
     value: string
     width?: string

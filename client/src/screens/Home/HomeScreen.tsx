@@ -5,7 +5,7 @@ import AddBookButton from "../../components/AddBookModal/AddBookButton";
 import { AnyAction, ThunkDispatch } from "@reduxjs/toolkit";
 import { AppDispatch, RootState } from "../../store";
 import { useDispatch, useSelector } from "react-redux";
-import { getAllBooks } from "../../features/bookSlice";
+import { addBook, getAllBooks } from "../../features/bookSlice";
 import { IBookRes } from "../../api/book.api";
 import { useNavigation } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
@@ -14,15 +14,22 @@ import styles from "./HomeScreen.style"
 const HomeScreen = () => {
     const navigation = useNavigation<StackNavigationProp<RootStackParamList>>();
     const dispatch: ThunkDispatch<RootState, undefined, AnyAction> = useDispatch<AppDispatch>();
-    const book = useSelector((state: RootState) => state.bookReducer.bookState) as IBookRes[];
-    console.log(book);
+    const book = useSelector((state: RootState) => state.bookReducer.allBookState) as IBookRes[];
+
     const [isVisible, setİsVisiable] = useState<boolean>(false);
     const [dataList, setDataList] = useState<IBookRes[]>([]);
 
     useEffect(() => {
         dispatch(getAllBooks());
+        console.log("geldim");
+    }, []);
+    
+    useEffect(() => {
         setDataList(book);
+        console.log("geldim 2");
     }, [book]);
+
+
     const handlePress = () => {
         setİsVisiable(!isVisible);
     };
@@ -35,9 +42,10 @@ const HomeScreen = () => {
                     <Image
                         source={{ uri: item.coverImage }}
                         style={styles.ımage}
+                        resizeMode="contain"
                     />
                     <View style={{ alignItems: "flex-start", width: "100%" }}>
-                        <Text style={styles.bookText}>
+                        <Text style={styles.bookText} numberOfLines={2}>
                             Kitap Adı:
                             <Text style={styles.bookTextTitle}>
                                 {item.title}
@@ -66,7 +74,6 @@ const HomeScreen = () => {
                 style={{ marginLeft: "auto", marginRight: "auto" }}
                 data={dataList}
                 renderItem={renderItem}
-                keyExtractor={(item) => item.isbn}
                 numColumns={2}
                 contentContainerStyle={{ alignItems: "flex-start" }}
                 showsVerticalScrollIndicator={false}

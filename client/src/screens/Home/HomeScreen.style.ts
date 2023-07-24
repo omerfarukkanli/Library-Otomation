@@ -15,6 +15,7 @@ export default StyleSheet.create({
         marginBottom: 10
     },
     bookText: {
+        marginBottom: 15,
         paddingLeft: 10,
         fontSize: 12
     },

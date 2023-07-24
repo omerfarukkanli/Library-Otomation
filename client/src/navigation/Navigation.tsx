@@ -27,8 +27,8 @@ const Navigation = () => {
             <Stack.Screen name='Login' component={LoginScreen} options={{ headerShown: false }} />
             <Stack.Screen name='Register' component={RegisterScreen} options={{ headerShown: false }} />
             <Stack.Screen name='Home' component={HomeScreen} options={{ title: "Ana Sayfa" }} />
-            <Stack.Screen name='Bookdetail' component={BookDetailScreen} />
-            <Stack.Screen name='Profile' component={ProfileScreen} options={{ headerRight: undefined }} />
+            <Stack.Screen name='Bookdetail' component={BookDetailScreen}options={{ title: "Kitap Detay" }} />
+            <Stack.Screen name='Profile' component={ProfileScreen} options={{ headerRight: undefined ,title:"Profil"}} />
 
         </Stack.Navigator>
     )

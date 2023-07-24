@@ -6,10 +6,11 @@ import AddBookInput from './AddBookInput'
 import { IBook } from '../../api/book.api'
 import { AnyAction, ThunkDispatch } from '@reduxjs/toolkit'
 import { AppDispatch, RootState } from '../../store'
-import { useDispatch } from 'react-redux'
-import { addBook, clearBook } from '../../features/bookSlice'
+import { useDispatch, useSelector } from 'react-redux'
+import { addBook, getAllBooks } from '../../features/bookSlice'
 import * as ImagePicker from 'expo-image-picker';
 import * as FS from "expo-file-system"
+import ErrorText from '../ErrorText/ErrorText'
 interface IProps {
     isVisible: boolean;
     onClose: () => void
@@ -17,7 +18,7 @@ interface IProps {
 
 const AddBookModal: React.FC<IProps | any> = ({ isVisible, onClose }) => {
     const dispatch: ThunkDispatch<RootState, undefined, AnyAction> = useDispatch<AppDispatch>()
-
+    const selectError = useSelector((state: RootState) => state.bookReducer.error);
     const [authors, setAuthors] = useState<string[]>([])
     const [bookName, setBookName] = useState("")
     const [isbn, setIsbn] = useState("")
@@ -94,6 +95,7 @@ const AddBookModal: React.FC<IProps | any> = ({ isVisible, onClose }) => {
         const user = await dispatch(addBook(bookData));
         if (user.meta.requestStatus === "fulfilled") {
             onClose();
+            dispatch(getAllBooks());
             setAuthors([]);
             setBookName("");
             setGenre("");
@@ -101,13 +103,12 @@ const AddBookModal: React.FC<IProps | any> = ({ isVisible, onClose }) => {
             setIsImageLoaded(false);
             setBase64Data("")
         }
-        else dispatch(clearBook())
     }
-
 
     return (
         <Modal isVisible={isVisible} style={styles.modalContainer} onBackdropPress={onClose} >
             <View style={styles.innerContainer}>
+                <ErrorText text={selectError} />
                 <View style={styles.textCOntainer}>
                     <AddBookInput placeholder='Kitap Adı' value={bookName} onChangeText={setBookName} />
                     <AddBookInput placeholder='ISBN' value={isbn} onChangeText={setIsbn} />

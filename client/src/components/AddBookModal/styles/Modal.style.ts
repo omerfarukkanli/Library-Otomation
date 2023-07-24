@@ -6,15 +6,16 @@ export default StyleSheet.create({
         justifyContent: "flex-end"
     },
     innerContainer: {
+        marginTop:40,
         padding: 20,
         alignItems: "center",
-        margin: 0,
         backgroundColor: "white",
         height: dviceSize.height / 2,
         borderTopLeftRadius: 20,
         borderTopRightRadius: 20
     },
     textCOntainer: {
+        marginTop:40,
         alignItems: "flex-start",
         width: "100%"
     },
@@ -63,19 +64,9 @@ export default StyleSheet.create({
         padding: 10,
         marginBottom: 10,
     },
-    base64Text: {
-        marginBottom: 10,
-    },
+   
     clearButton: {
         backgroundColor: 'red',
         padding: 10,
-    },
-    checkmark: {
-        backgroundColor: 'green',
-        borderRadius: 100,
-        width: 25,
-        height: 25,
-        justifyContent: 'center',
-        alignItems: 'center',
     },
 })
