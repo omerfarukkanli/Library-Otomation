@@ -9,7 +9,6 @@ export default StyleSheet.create({
     },
     innerContainer: {
         padding: 20,
-        marginBottom: 50,
         alignItems: "center",
         justifyContent: "center",
         width: "100%",
@@ -71,13 +70,12 @@ export default StyleSheet.create({
     },
     authorsList: {
         height: 100,
-        marginBottom: 10,
         width: "100%",
         flexDirection: 'row',
         alignItems: "flex-start"
     },
     authorItem: {
-        marginBottom:5,
+        marginBottom: 5,
         height: 30,
         justifyContent: "space-between",
         borderRadius: 10,

@@ -43,6 +43,7 @@ export const BookSlice = createSlice({
     name: "Book",
     initialState: initialState,
     reducers: {
+        clearBookError: (state) => { state.error = undefined }
     },
     extraReducers: (builder) => {
         builder.addCase(addBook.fulfilled, (state, action) => {
@@ -69,4 +70,5 @@ export const BookSlice = createSlice({
         });
     },
 })
+export const { clearBookError } = BookSlice.actions;
 export default BookSlice.reducer;

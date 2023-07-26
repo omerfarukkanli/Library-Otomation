@@ -1,15 +1,16 @@
 import React, { useState } from 'react';
-import { View, Text, Image, Button, TouchableOpacity, ScrollView, Alert } from 'react-native';
+import { View, Text, Image, TouchableOpacity, ScrollView, Alert } from 'react-native';
 import { RouteProp, useNavigation } from '@react-navigation/native';
 import { RootStackParamList } from "../../types";
 import styles from "./Book.Detail.style"
 import AddBookInput from '../../components/AddBookModal/AddBookInput';
-import { IBook, IBookRes } from '../../api/book.api';
+import { IBookRes } from '../../api/book.api';
 import { AnyAction, ThunkDispatch } from '@reduxjs/toolkit';
 import { AppDispatch, RootState } from '../../store';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { deleteBook, getAllBooks, updateBook } from '../../features/bookSlice';
 import { StackNavigationProp } from '@react-navigation/stack';
+
 
 
 type BookDetailScreenRouteProp = RouteProp<RootStackParamList, 'Bookdetail'>;
@@ -21,6 +22,7 @@ interface BookDetailScreenProps {
 const BookDetailScreen: React.FC<BookDetailScreenProps> = ({ route }) => {
     const navigation = useNavigation<StackNavigationProp<RootStackParamList>>();
     const dispatch: ThunkDispatch<RootState, undefined, AnyAction> = useDispatch<AppDispatch>()
+    const user = useSelector((state: RootState) => state.userReducer.userState);
     const book = route.params?.book ?? null;
     const [author, setAuthor] = useState("");
     const [title, setTitle] = useState(book?.title ?? '');
@@ -31,44 +33,65 @@ const BookDetailScreen: React.FC<BookDetailScreenProps> = ({ route }) => {
         return <Text>Loading...</Text>;
     }
     const handleRemoveAuthor = (index: number) => {
-        if (authors.length < 2) {
+        if (user !== null) {
+
+            if (authors.length! < 2) {
+                console.log(authors.length)
+                const updatedAuthors = [...authors];
+                updatedAuthors.splice(index, 1);
+                setAuthors(updatedAuthors);
+            }
             Alert.alert("En az bir yazar olmalı !")
         }
-        else {
-            console.log(authors.length)
-            const updatedAuthors = [...authors];
-            updatedAuthors.splice(index, 1);
-            setAuthors(updatedAuthors);
-        }
+        Alert.alert("Lütfen giriş yapınız")
     };
 
     const handleAddAuthor = () => {
-        if (author.trim() !== '') {
-            setAuthors([...authors, author.trim()]);
-            setAuthor('');
+        if (user == null) {
+            Alert.alert("Lütfen giriş yapınız")
+        }
+        else {
+            if (author.trim() !== '') {
+                setAuthors([...authors, author.trim()]);
+                setAuthor('');
+            }
         }
     }
 
     const updatePressHandle = async () => {
-        const updateBookData: IBookRes = {
-            title: title,
-            authors: authors,
-            isbn: isbn,
-            genre: genre,
-            coverImage: book.coverImage
+        if (user == null) {
+            Alert.alert("Lütfen giriş yapınız")
         }
-        const updateBookRedux = await dispatch(updateBook({ id: book._id ?? "", book: updateBookData }));
-        if (updateBookRedux.meta.requestStatus === "fulfilled") {
-            dispatch(getAllBooks());
-            navigation.navigate("Home")
+        else {
+            const updateBookData: IBookRes = {
+                title: title,
+                authors: authors,
+                isbn: isbn,
+                genre: genre,
+                coverImage: book.coverImage
+            }
+            const updateBookRedux = await dispatch(updateBook({ id: book._id ?? "", book: updateBookData }));
+            if (updateBookRedux.meta.requestStatus === "fulfilled") {
+                dispatch(getAllBooks());
+                navigation.navigate("Home")
+            }
         }
     }
     const deletePressHandle = async () => {
-        const deleteItem = await dispatch(deleteBook(book._id as string));
-        if (deleteItem.meta.requestStatus === "fulfilled") {
-            dispatch(getAllBooks());
-            navigation.navigate("Home")
+        if (user !== null) {
+            if (user.authority == true) {
+                const deleteItem = await dispatch(deleteBook(book._id as string));
+                if (deleteItem.meta.requestStatus === "fulfilled") {
+                    dispatch(getAllBooks());
+                    navigation.navigate("Home")
+                }
+            }
+            else {
+                Alert.alert("Admin Değilsiniz")
+            }
         }
+        else Alert.alert("Lütfen giriş yapınız")
+
     }
 
     return (

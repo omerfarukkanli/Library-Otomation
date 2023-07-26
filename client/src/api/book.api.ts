@@ -14,6 +14,7 @@ export interface IBookRes {
     genre?: string;
     coverImage?: string;
 }
+
 export const addBookFromDB = async (book: IBook): Promise<IBookRes | any> => {
     try {
         const response = await axios.post("http://10.0.2.2:3000/books/create", book,)

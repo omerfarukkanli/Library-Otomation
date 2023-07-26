@@ -14,8 +14,8 @@ export default StyleSheet.create({
         borderTopLeftRadius: 20,
         borderTopRightRadius: 20
     },
-    textCOntainer: {
-        marginTop:40,
+    textContainer: {
+        marginTop:20,
         alignItems: "flex-start",
         width: "100%"
     },
@@ -39,34 +39,56 @@ export default StyleSheet.create({
         color: "white",
     },
     authorItem: {
+        marginBottom: 5,
+        height: 30,
+        justifyContent: "space-between",
+        borderRadius: 10,
+        padding: 5,
         flexDirection: 'row',
         alignItems: 'center',
-        marginRight: 10,
+        backgroundColor: "tomato",
     },
-    authorText: {
-        fontSize: 10,
-        marginRight: 5,
+   authorText: {
+        color: 'white',
+        fontSize: 14,
+        marginRight: 15,
     },
     removeIcon: {
         color: 'red',
         fontWeight: 'bold',
     },
     authorsList: {
+        height: 70,
+        width: "100%",
         flexDirection: 'row',
-        flexWrap: 'wrap',
+        alignItems: "flex-start"
     },
-    container: {
-        flex: 1,
-        padding: 20,
+    bookContainerText: {
+        color: "tomato",
+        fontWeight: "bold",
+        width: "20%",
+        marginBottom: 10
     },
-    imageButton: {
-        backgroundColor: 'lightblue',
-        padding: 10,
-        marginBottom: 10,
+    buttonContainer: {
+        width: "100%",
+        flexDirection: "row",
+        margin: 10,
+        alignItems: "center",
+        justifyContent: "center"
     },
-   
-    clearButton: {
-        backgroundColor: 'red',
-        padding: 10,
+    buttonStyle: {
+        padding: 5,
+        borderRadius: 7,
+        width: 100,
+        backgroundColor: "tomato",
+        marginLeft: 10,
+        marginRight: 10,
+        alignItems: "center",
+        justifyContent: "center"
     },
+    buttonTextStyle: {
+        fontWeight: "bold",
+        color: "white"
+    },
+      
 })
