@@ -8,7 +8,7 @@ import { IBookRes } from '../../api/book.api';
 import { useNavigation } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { RootStackParamList } from '../../types';
-import Modal from 'react-native-modal'; // Burada ekledik
+import Modal from 'react-native-modal';
 import styles from './HomeScreen.style';
 import AddBookModal from '../../components/AddBookModal/AddBookModal';
 import AddBookButton from '../../components/AddBookModal/AddBookButton';
@@ -16,22 +16,23 @@ import AddBookButton from '../../components/AddBookModal/AddBookButton';
 const HomeScreen = () => {
   const navigation = useNavigation<StackNavigationProp<RootStackParamList>>();
   const dispatch: ThunkDispatch<RootState, undefined, AnyAction> = useDispatch<AppDispatch>();
+  const user = useSelector((state: RootState) => state.userReducer.userState);
   const book = useSelector((state: RootState) => state.bookReducer.allBookState) as IBookRes[];
   const [isVisible, setIsVisible] = useState<boolean>(false);
   const [dataList, setDataList] = useState<IBookRes[]>([]);
   const [searchText, setSearchText] = useState<string>('');
-  const user = useSelector((state: RootState) => state.userReducer.userState);
   const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('asc');
-  const [selectedGenres, setSelectedGenres] = useState<string[]>([]);
-  const [isFilterModalVisible, setFilterModalVisible] = useState<boolean>(false); // Özel modal için state
-
+  const [genre, setGenre] = useState<string>("");
+  const [genres, setGenres] = useState<string[]>([])
+  const [isFilterModalVisible, setFilterModalVisible] = useState<boolean>(false);
   useEffect(() => {
     dispatch(getAllBooks());
   }, []);
 
   useEffect(() => {
-    setDataList(book);
-  }, [book]);
+    const filteredBooks = filterBooks(book);
+    setDataList(filteredBooks);
+  }, [book, genre]);
 
   const handlePress = () => {
     if (user !== null) {
@@ -66,7 +67,6 @@ const HomeScreen = () => {
 
   const handleToShortPress = () => {
     setSortOrder((prevSortOrder) => (prevSortOrder === 'asc' ? 'desc' : 'asc'));
-
     const sortedData = [...dataList].sort((a, b) => {
       const titleA = a.title!.toLowerCase();
       const titleB = b.title!.toLowerCase();
@@ -77,57 +77,29 @@ const HomeScreen = () => {
         return titleB.localeCompare(titleA);
       }
     });
-
     setDataList(sortedData);
   };
 
   const handleFilterPress = () => {
-    setFilterModalVisible(true); // Modalı göstermek için state'i güncelliyoruz
+    setFilterModalVisible(true);
+    const genresArray: string[] = book.map((book: IBookRes) => book.genre!)
+    setGenres([...new Set(genresArray)])
   };
-
-  const handleFilterDismiss = () => {
-    setFilterModalVisible(false); // Modal kapandığında bu fonksiyon çalışacak ve state'i güncelleyecek
-  };
-
-  const handleGenreSelect = (genre: string) => {
-    if (selectedGenres.includes(genre)) {
-      setSelectedGenres((prevGenres) => prevGenres.filter((g) => g !== genre));
-    } else {
-      setSelectedGenres((prevGenres) => [...prevGenres, genre]);
-    }
-  };
-
-  const clearSelectedGenres = () => {
-    setSelectedGenres([]);
-  };
-
+  
   const filterBooks = (books: IBookRes[]) => {
-    if (selectedGenres.length === 0) {
-      return books;
-    } else {
-      return books.filter((book) => selectedGenres.includes(book.genre!));
+    if (genre === "") return books;
+    else {
+      return books.filter((book) => genre.includes(book.genre!));
     }
   };
-
-  useEffect(() => {
-    const filteredBooks = filterBooks(book);
-    setDataList(filteredBooks);
-  }, [book, selectedGenres]);
-
   const renderItem = ({ item }: { item: IBookRes }) => (
-    <TouchableOpacity onPress={() => handleBookPress(item)}>
-      <View style={{ marginTop: 30, marginRight: 5, marginLeft: 5 }}>
+    <TouchableOpacity onPress={() => handleBookPress(item)} style={{ width: "50%" }}>
+      <View style={{ width: "100%" }}>
         <View style={styles.bookCOntainer}>
           <Image source={{ uri: item.coverImage }} style={styles.ımage} resizeMode="contain" />
-          <View style={{ alignItems: 'flex-start', width: '100%' }}>
-            <Text style={styles.bookText} numberOfLines={2}>
-              Kitap Adı:
-              <Text style={styles.bookTextTitle}>{item.title}</Text>
-            </Text>
-            <Text style={styles.bookText}>
-              Tür:
-              <Text style={styles.bookTextTitle}>{item.genre}</Text>
-            </Text>
+          <View style={styles.bookTextContainer}>
+            <Text style={styles.bookTextTitle}>{item.title}</Text>
+            <Text style={styles.bookTextGenre}>{item.genre}</Text>
           </View>
         </View>
       </View>
@@ -157,46 +129,43 @@ const HomeScreen = () => {
           <Text style={styles.filterContainertext}>Sırala</Text>
         </TouchableOpacity>
       </View>
-      <View style={styles.selectedGenresContainer}>
-        {selectedGenres.length > 0 && (
-          <>
-            <Text style={styles.selectedGenresText}>Seçili Türler:</Text>
-            {selectedGenres.map((genre) => (
-              <Text key={genre} style={styles.selectedGenre}>
-                {genre}
-              </Text>
-            ))}
-            <TouchableOpacity onPress={clearSelectedGenres} style={styles.clearButton}>
+      {
+        genre === "" ? (
+          <View></View>
+        ) :
+          (<View style={styles.selectedGenresContainer}>
+            <Text style={styles.selectedGenresText}>Seçili Tür:</Text>
+            <Text style={styles.selectedGenre}>
+              {genre}
+            </Text>
+            <TouchableOpacity onPress={() => setGenre("")} style={styles.clearButton}>
               <Text style={styles.clearButtonText}>Temizle</Text>
             </TouchableOpacity>
-          </>
-        )}
-      </View>
+          </View>
+          )
+      }
       <FlatList
-        style={{ marginLeft: 'auto', marginRight: 'auto' }}
         data={dataList}
         renderItem={renderItem}
         numColumns={2}
-        contentContainerStyle={{ alignItems: 'flex-start' }}
         showsVerticalScrollIndicator={false}
       />
-
-      {/* Özelleştirilmiş Modal */}
       <Modal
         isVisible={isFilterModalVisible}
-        onBackdropPress={handleFilterDismiss}
+        onBackdropPress={() => setFilterModalVisible(false)}
         style={{ margin: 0 }}
-        backdropOpacity={0.7} // Modal dışına tıklanabilirlik opaklığı
       >
         <View style={{ backgroundColor: 'white', maxHeight: 400, borderRadius: 8 }}>
           <FlatList
-            data={book}
+            data={genres}
             renderItem={({ item }) => (
-              <TouchableOpacity onPress={() => handleGenreSelect(item.genre!)} style={styles.genreItem}>
-                <Text>{item.genre}</Text>
+              <TouchableOpacity style={styles.genreItem} onPress={() => {
+                setGenre(item)
+                setFilterModalVisible(false);
+              }}>
+                <Text>{item}</Text>
               </TouchableOpacity>
             )}
-            keyExtractor={(item) => item.genre!.toString()}
             style={{ margin: 16 }}
           />
         </View>

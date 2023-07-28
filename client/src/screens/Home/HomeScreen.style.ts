@@ -1,28 +1,41 @@
-import { StyleSheet } from "react-native";
-
+import { Dimensions, StyleSheet } from "react-native";
+const dviceSize = Dimensions.get("window")
 export default StyleSheet.create({
     bookCOntainer: {
-        borderRadius: 10,
+        height: 280,
+        padding: 10,
+        width: dviceSize.width / 2,
         alignItems: "center",
-        width: "100%",
-        marginLeft: 5,
-        marginRight: 5,
     },
-    ımage: {
-        width: 150,
+    imageContainer: {
+        backgroundColor: "tomato",
+        padding: 10,
+        width: 140,
         height: 200,
         borderRadius: 10,
+        marginBottom: 20
+    },
+    ımage: {
+        borderRadius: 10,
+        width: "70%",
+        height: "70%",
         marginBottom: 10
     },
-    bookText: {
-        marginBottom: 15,
-        paddingLeft: 10,
-        fontSize: 12
+    bookTextContainer: {
+        padding: 5,
+        alignItems: 'flex-start',
+        width: '100%'
     },
     bookTextTitle: {
+        height: 40,
         paddingLeft: 10,
-        fontSize: 14,
+        fontSize: 16,
         fontWeight: "bold",
+    },
+    bookTextGenre: {
+        fontWeight: "normal",
+        fontSize: 12,
+        paddingLeft: 10,
     },
     Search: {
         height: "100%",
@@ -92,35 +105,35 @@ export default StyleSheet.create({
         justifyContent: 'center',
         backgroundColor: '#f0f0f0',
         padding: 10,
-      },
-      selectedGenresText: {
+    },
+    selectedGenresText: {
         fontSize: 18,
         fontWeight: 'bold',
         marginRight: 5,
-      },
-      selectedGenre: {
+    },
+    selectedGenre: {
         backgroundColor: '#d3d3d3',
         color: '#333',
         paddingHorizontal: 10,
         paddingVertical: 5,
         borderRadius: 5,
         marginRight: 5,
-      },
-      clearButton: {
+    },
+    clearButton: {
         backgroundColor: '#ff4500',
         paddingHorizontal: 10,
         paddingVertical: 5,
         borderRadius: 5,
-      },
-      clearButtonText: {
+    },
+    clearButtonText: {
         color: '#fff',
         fontWeight: 'bold',
-      },
-      genreItem: {
+    },
+    genreItem: {
         paddingVertical: 12,
         paddingHorizontal: 16,
         borderBottomWidth: 1,
         borderBottomColor: '#e0e0e0',
-      },
+    },
 })
 
