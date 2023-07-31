@@ -9,7 +9,6 @@ import { AppDispatch, RootState } from '../../store'
 import { useDispatch, useSelector } from 'react-redux'
 import { addBook, getAllBooks } from '../../features/bookSlice'
 import * as ImagePicker from 'expo-image-picker';
-import * as FS from "expo-file-system"
 import ErrorText from '../ErrorText/ErrorText'
 interface IProps {
     isVisible: boolean;
@@ -58,8 +57,7 @@ const AddBookModal: React.FC<IProps | any> = ({ isVisible, onClose }) => {
             });
 
             if (!result.canceled) {
-                const fileType = await getFileInfo(result.assets[0].uri)
-                const base64 = `data:image/${fileType};base64,${result.assets[0].base64}`
+                const base64 = `data:image/jpeg;base64,${result.assets[0].base64}`
                 setBase64Data(base64)
                 setIsImageLoaded(true);
             }
@@ -67,17 +65,6 @@ const AddBookModal: React.FC<IProps | any> = ({ isVisible, onClose }) => {
             console.log('Resim seçme hatası:', error);
         }
     };
-    const getFileInfo = async (fileURI: string) => {
-        try {
-            const fileInfo = await FS.getInfoAsync(fileURI);
-            if (fileInfo.exists) {
-                const extension = fileInfo.uri.split('.').pop();
-                return extension;
-            }
-        } catch (error) {
-            console.error('Hata:', error);
-        }
-    }
     const handleImageClear = () => {
         setBase64Data('');
         setIsImageLoaded(false);

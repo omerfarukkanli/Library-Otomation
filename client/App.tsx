@@ -1,7 +1,7 @@
 import { NavigationContainer } from "@react-navigation/native"
-import Navigation from "./navigation/Navigation";
+import Navigation from "./src/navigation/Navigation";
 import { Provider } from "react-redux";
-import store from "./store/index"
+import store from "./src/store/index"
 
 const App = () => {
   return (
