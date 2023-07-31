@@ -1,4 +1,6 @@
 import axios, { AxiosResponse } from "axios"
+import { baseUrl } from "./book.api";
+
 export interface IUser {
     name: string;
     lastname: string;
@@ -14,7 +16,7 @@ export interface IUserRes {
 }
 export const addUserFromDb = async (user: IUser): Promise<IUser | any> => {
     try {
-        const response = await axios.post("http://10.0.2.2:3000/register", user)
+        const response = await axios.post(`${baseUrl}/register`, user)
         return response.data;
     } catch (error: any) {
         if (error.response) {
@@ -27,7 +29,7 @@ export const addUserFromDb = async (user: IUser): Promise<IUser | any> => {
 }
 export const loginFromDb = async (user: IUserRes): Promise<IUser | any> => {
     try {
-        const response = await axios.post("http://10.0.2.2:3000/login", user)
+        const response = await axios.post(`${baseUrl}/login`, user)
         return response.data;
     } catch (error: any) {
         if (error.response) {

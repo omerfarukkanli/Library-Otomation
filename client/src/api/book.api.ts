@@ -14,10 +14,10 @@ export interface IBookRes {
     genre?: string;
     coverImage?: string;
 }
-
+export const baseUrl = "https://library-otomation.up.railway.app"
 export const addBookFromDB = async (book: IBook): Promise<IBookRes | any> => {
     try {
-        const response = await axios.post("http://10.0.2.2:3000/books/create", book,)
+        const response = await axios.post(`${baseUrl}/books/create`, book,)
         return response.data;
     } catch (error: any) {
         if (error.response) {
@@ -31,7 +31,7 @@ export const addBookFromDB = async (book: IBook): Promise<IBookRes | any> => {
 
 export const getAllBookFromDB = async () => {
     try {
-        const response = await axios.get("http://10.0.2.2:3000/books")
+        const response = await axios.get(`${baseUrl}/books`)
         const books: IBookRes[] = response.data.books;
         return books
     } catch (error: any) {
@@ -47,7 +47,7 @@ export const getAllBookFromDB = async () => {
 
 export const upgradeBookFromDB = async (id: string, book: IBookRes) => {
     try {
-        const response = await axios.put(`http://10.0.2.2:3000/books/${id}`, book);
+        const response = await axios.put(`${baseUrl}/books/${id}`, book);
         return response.data
     } catch (error: any) {
         if (error.response) {
@@ -62,7 +62,7 @@ export const upgradeBookFromDB = async (id: string, book: IBookRes) => {
 
 export const deleteBookFromDB = async (id: string) => {
     console.log(id)
-    const deleteItem = await axios.delete(`http://10.0.2.2:3000/books/${id}`)
+    const deleteItem = await axios.delete(`${baseUrl}/books/${id}`)
     return deleteItem.data
 }
 
