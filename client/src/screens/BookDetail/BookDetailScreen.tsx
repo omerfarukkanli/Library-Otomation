@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { View, Text, Image, TouchableOpacity, ScrollView, Alert } from 'react-native';
-import { RouteProp, useNavigation } from '@react-navigation/native';
+import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
 import { RootStackParamList } from "../../types";
 import styles from "./Book.Detail.style"
 import AddBookInput from '../../components/AddBookModal/AddBookInput';
@@ -12,17 +12,12 @@ import { deleteBook, getAllBooks, updateBook } from '../../features/bookSlice';
 import { StackNavigationProp } from '@react-navigation/stack';
 
 
-
 type BookDetailScreenRouteProp = RouteProp<RootStackParamList, 'Bookdetail'>;
-
-interface BookDetailScreenProps {
-    route: BookDetailScreenRouteProp;
-}
-
-const BookDetailScreen: React.FC<BookDetailScreenProps> = ({ route }) => {
+const BookDetailScreen = () => {
     const navigation = useNavigation<StackNavigationProp<RootStackParamList>>();
     const dispatch: ThunkDispatch<RootState, undefined, AnyAction> = useDispatch<AppDispatch>()
     const user = useSelector((state: RootState) => state.userReducer.userState);
+    const route = useRoute<BookDetailScreenRouteProp>()
     const book = route.params?.book ?? null;
     const [author, setAuthor] = useState("");
     const [title, setTitle] = useState(book?.title ?? '');
