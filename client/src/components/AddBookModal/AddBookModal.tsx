@@ -94,7 +94,7 @@ const AddBookModal: React.FC<IProps | any> = ({ isVisible, onClose }) => {
     return (
         <Modal isVisible={isVisible} style={styles.modalContainer} onBackdropPress={onClose} >
             <View style={styles.innerContainer}>
-                <ErrorText text={selectError} />
+                <ErrorText top={10} text={selectError} />
                 <View style={styles.textContainer}>
                     <AddBookInput placeholder='Kitap Adı' value={bookName} onChangeText={setBookName} />
                     <AddBookInput placeholder='ISBN en az 9 hane olmalı' value={isbn} onChangeText={setIsbn} />

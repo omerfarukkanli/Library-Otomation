@@ -42,6 +42,7 @@ const RegisterScreen = () => {
             setLastName('');
             setEmail('');
             setPassword('')
+            dispatch(clearError())
         }
         else dispatch(clearUser())
     }
@@ -49,7 +50,7 @@ const RegisterScreen = () => {
         <View style={styles.container}>
             <View style={{ position: "relative" }}>
                 <Text style={styles.text}> LİBRARY</Text>
-                <ErrorText top={10} text={selectError} />
+                <ErrorText top={40} text={selectError} />
             </View>
             <InputText placeholder="Ad" value={name} onChangeText={setName} />
             <InputText placeholder="Soyad" value={lastname} onChangeText={setLastName} />
@@ -58,7 +59,10 @@ const RegisterScreen = () => {
             <AuthButton title="Kayıt Ol" handlePressButton={handlePressButton} />
             <View style={styles.textController}>
                 <Text>Giriş yapmak için </Text>
-                <Text style={{ color: "tomato" }} onPress={() => navigation.navigate("Login")}>Tıklayınız</Text>
+                <Text style={{ color: "tomato" }} onPress={() => {
+                    navigation.navigate("Login")
+                    dispatch(clearError())
+                }}>Tıklayınız</Text>
             </View>
         </View>
     )

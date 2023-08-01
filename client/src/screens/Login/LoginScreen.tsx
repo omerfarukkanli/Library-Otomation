@@ -6,7 +6,7 @@ import { StackNavigationProp } from '@react-navigation/stack';
 import { useNavigation } from '@react-navigation/core';
 import { RootStackParamList } from '../../types'
 import { useState } from "react";
-import { clearUser, loginUser } from "../../features/userSlice";
+import { clearError, clearUser, loginUser } from "../../features/userSlice";
 import { IUserRes } from "../../api/user.api";
 import { AppDispatch, RootState } from "../../store";
 import { AnyAction, ThunkDispatch } from "@reduxjs/toolkit";
@@ -36,6 +36,7 @@ const LoginScreen = () => {
             navigation.navigate('Home');
             setEmail('');
             setPassword('')
+            dispatch(clearError())
         }
         else dispatch(clearUser())
     }
@@ -43,14 +44,17 @@ const LoginScreen = () => {
         <View style={styles.container}>
             <View style={{ position: "relative" }}>
                 <Text style={styles.text}> LİBRARY</Text>
-                <ErrorText text={selectError} />
+                <ErrorText top={40} text={selectError} />
             </View>
             <InputText value={email} placeholder="E-mail" onChangeText={setEmail} keyboardType="email-address" />
             <InputText value={password} placeholder="şifre" secureText={true} onChangeText={setPassword} />
             <AuthButton title="Gİriş Yap" handlePressButton={handlePressButton} />
             <View style={styles.textController}>
                 <Text>Kayıt olmak için </Text>
-                <Text style={{ color: "tomato" }} onPress={() => navigation.navigate("Register")}>Tıklayınız</Text>
+                <Text style={{ color: "tomato" }} onPress={() => {
+                    dispatch(clearError())
+                    navigation.navigate("Register")
+                }}>Tıklayınız</Text>
             </View>
         </View >
     )
