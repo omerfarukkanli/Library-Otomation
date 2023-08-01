@@ -39,3 +39,6 @@ kullanılması gerekmemesi (APK haline getirildi) +
 * Bir yetkilendirme mekanizması içermeli. Örneğin standart kullanıcılar
 kayıt oluşturabilsin ilişkilendirebilsin fakat silemesin. Yönetici tüm
 eylemleri gerçekleştirebilsin. +
+
+* Admin : Test@gmail.com
+* Parola : 123456789
