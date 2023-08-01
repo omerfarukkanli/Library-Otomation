@@ -7,7 +7,6 @@ export default StyleSheet.create({
         fontWeight: "500",
         display: "flex",
         position: "absolute",
-        top: 40
     }
 
 })

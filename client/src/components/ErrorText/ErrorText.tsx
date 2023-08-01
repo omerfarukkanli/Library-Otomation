@@ -3,11 +3,12 @@ import React from 'react'
 import styles from "./ErrorText.style"
 interface IProp {
     text: string | undefined;
+    top: number
 }
-const ErrorText: React.FC<IProp> = ({ text }) => {
+const ErrorText: React.FC<IProp> = ({ text, top }) => {
     return (
         <>
-            <Text style={styles.errorMessage}>{text}</Text>
+            <Text style={[styles.errorMessage, { top: top }]}>{text}</Text>
         </>
     )
 }

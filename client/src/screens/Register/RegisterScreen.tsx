@@ -49,7 +49,7 @@ const RegisterScreen = () => {
         <View style={styles.container}>
             <View style={{ position: "relative" }}>
                 <Text style={styles.text}> LİBRARY</Text>
-                <ErrorText text={selectError} />
+                <ErrorText top={10} text={selectError} />
             </View>
             <InputText placeholder="Ad" value={name} onChangeText={setName} />
             <InputText placeholder="Soyad" value={lastname} onChangeText={setLastName} />
