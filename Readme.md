@@ -42,3 +42,31 @@ eylemleri gerçekleştirebilsin. +
 
 * Admin : Test@gmail.com
 * Parola : 123456789
+
+## Proje Kurulumu 
+
+* Git clone ile projeyi locale indiriniz.
+*  Proje içerisinde bulunan client ve server dosyalarını çalıştırabilmek için :
+   * client dosyası : 
+      * `cd client` 
+      * `npm install` 
+      * Test edebilmek için bilgisayarınızda emulator olması gerekmektedir. 
+         * `yarn start` 
+      * Press s diyince development build moduna geçer ve press a diyince android emulatorde açılır.
+        
+   * server dosyası : 
+       * `cd server` 
+       * `npm install` gerekli paketler indikten sonra projede .env dosyası açıp içerisine aşağıdaki gibi
+         yazmanız gerekmektedir.
+          
+          ```sh
+          DATABASE_URL=mongodb+srv://kanlomerfaruk:159753Omer@books.g0lgcx0.mongodb.net/?retryWrites=true&w=majority
+          CLOUD_NAME=dyyuox25w
+          API_KEY=627694213558186
+          API_SECRET=vnLWxb5gjilNbiyvhizHAR5itBE
+          ```  
+
+      * `npm start` diyerek veritabanı bağlantısı yapıp localinizde 
+http://localhost:3000/books istek atıp kitapları görüntüleyebilirsiniz. 
+
+  * Projenin backend servisi railway üzerinde deploy edilmiştir.
